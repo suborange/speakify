@@ -1,8 +1,52 @@
 :root {
-    
+
 }
 html, body {
     height: 100%;
     width: 100%;
+    background-color: #191414;
+    font-family: 'Hammersmith One', sans-serif;
+}
+main {
+    color: white;
+}
+nav {
+    justify-content: center;
+}
+nav a {
+    padding: 15px;
+    font-size: 2em;
+    text-decoration: none;
+    font-weight: bold;
+    color: #1db954;
+}
+img.home {
+    margin-top: 2px;
+    width: 35px;
+    transform: scaleY(-1);
 }
 
+div.container {
+    display: flex;
+}
+
+.test {
+    border: 2.5px solid black;
+    border-radius: 4px;
+}
+
+
+footer {
+color:black;
+
+}
+/* CUSTOM CSS */
+.jcenter {
+    justify-content: center;
+}
+.acenter {
+    align-items: center
+}
+.tcenter {
+    text-align: center;
+}

@@ -9,9 +9,33 @@ app.use(express.static('public'));
 // create routes
 app.get('/', (req,response) => {
     // home page
-    response.render('index'); // render the home index page
+    // render the home index page
+    response.render('index'); 
 });
 
+app.get('/song', (req,response) => {
+    // random song page
+    // render the song page
+    response.render('song'); 
+});
+
+app.get('/album', (req,response) => {
+    // random album page
+    // render the album page
+    response.render('album'); 
+});
+
+app.get('/cover', (req,response) => {
+    // random cover page
+    // render the cover page
+    response.render('cover'); 
+});
+
+app.get('/sentence', (req,response) => {
+    // speakify page
+    // render the sentence page
+    response.render('sentence'); 
+});
 
 app.listen(3000, ()=> {
     console.log('started server on :3000');
