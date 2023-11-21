@@ -1,28 +1,35 @@
 // grab secret data from file
-const file_io = require('fs'); // for file input and output
+// const file_io = require('fs'); // for file input and output
+// const { load } = require('mime');
 // read static secrets and parse them into an object -> obj.field
-let secretdata = file_io.readFileSync('.secret.json');
-const secret = JSON.parse(secretdata);
+// let secretdata = file_io.readFileSync('.secret.json');
+// const secret = JSON.parse(secretdata);
 const APIController = (function () {
 
-    const clientId = secret.ID;
-    const clientSecret = secret.SECRET;
+    // const clientId = secret.ID;
+    // const clientSecret = secret.SECRET;
+    const clientId = "189cb2c4a3d94b80bc33f50a46322d9d";
+    const clientSecret = "af9d281b8ee748a2a97b37063b129886";
+    let acces_token = "something"; 
 
     const _getToken = async () => {
-        const result = await fetch('https://accounts.spotify.com/api/token', {
+         const result = await fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic' + btoa(clientId + ':' + clientSecret)
+                'Content-Type' : 'application/x-www-form-urlencoded', 
+                'Authorization' : 'Basic ' + btoa(clientId + ':' + clientSecret)
             },
             body: 'grant_type=client_credentials'
         });
         const data = await result.json();
-        return data.acess_token;
+        // console.log("token1", data.access_token);
+        // acces_token = data.acces_token;
+        
+        return data.access_token;
     }
 
 
-    const query = 'chlorine'; // have to call this function multiple times, based off the string entered by user. 
+    // const query = 'chlorine'; // have to call this function multiple times, based off the string entered by user. 
     // just get a returned track, fuck it if it doesnt work correctly/match the word
     const _getTrack = async (token, query) => {
 
@@ -30,17 +37,20 @@ const APIController = (function () {
             method: 'GET', headers: { 'Authorization': 'Bearer ' + token }
         });
         const data = await result.json();
-        console.log('track data:', data);
-        console.log('song name? data:', data.tracks.items.album.name);
+        console.log('track item data:', data.tracks.items);
+        console.log('song name? data:', data.tracks.items[0].name); // .album[0].name
         return data.tracks.items;
     }
+    // return favorites instead of genre?
+
 
     return {
-        getTrack() {
+        getTrack(t, q) {
             return _getTrack(t, q);
         },
         getToken() {
-            return _getToken();
+            return _getToken();        
+            // return acces_token;
         }
     }
 
@@ -125,26 +135,39 @@ const APPController = (function(UiCtrl, ApiCtrl){
 
     const DOMInputs = UiCtrl.inputField(); // get the objects of input fields?
 
-    const loadGenres = async () => {
-        const token = await ApiCtrl._getToken();
+    const loadPage = async () => {
+        const token = await ApiCtrl.getToken();
+        // console.log("on load", token);
 
         UiCtrl.storeToken(token);
 
-        const track = await ApiCtrl.getTrack(token, query); // need to figure out query here.
+        // const track = await ApiCtrl.getTrack(token, query); // need to figure out query here.
     }
 
 
+    // random track - for now not random?
     DOMInputs.sub_track.addEventListener('click', async () => {
-            const token = UiCtrl.getStoredToken().token;
+            const token = UiCtrl.getStoredToken().token;            
 
-            
+            const query = "Chlorine";
+            const track = await ApiCtrl.getTrack(token, query);
+            console.log("APP track: ",track);
+            UiCtrl.randTrack(track.name); // hopefully sends the name to the track to be displayed?
 
 
     });
 
 
-})();
+    return {
+        init() {
+            console.log("App is starting...");
+            loadPage();
+        }
+    }
 
+})(UIController, APIController);
+
+APPController.init(); // what will this do for me?
 
 
 
