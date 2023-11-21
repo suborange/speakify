@@ -78,7 +78,13 @@ const UIController = (function () {
 
         randTrack(name) {
             const html = `Random song: ${name}`;
-            document.querySelector().innerHTML = html; // or ${} idk
+            document.querySelector(DOMElements.displayTrack).innerHTML = html; // or ${} idk
+        },
+        
+        // maybe change back to album.. 
+        randGenre(genre) {
+            const html = `Random genre: ${genre}`;
+            document.querySelector(DOMElements.displayGenre).innerHTML = html;
         },
 
         // call once to display the cover
@@ -89,7 +95,7 @@ const UIController = (function () {
             </div>`;
 
             // should hopefully add an image of the album cover to the div here
-            const albumCover = document.querySelector(DOMElements.displayList).innerHTML = html;
+            const albumCover = document.querySelector(DOMElements.displayCover).innerHTML = html;
         },
 
         // need to be called multiple times? on how many words in strings
