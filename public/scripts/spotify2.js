@@ -38,6 +38,9 @@ const APIController = (function () {
     return {
         getTrack() {
             return _getTrack(t, q);
+        },
+        getToken() {
+            return _getToken();
         }
     }
 
@@ -55,7 +58,8 @@ const UIController = (function () {
         displayTrack: '#random_track', // div for displaying the returned song
         displayGenre: '#random_genre', // div for displaying the returned genre
         displayCover: '#display_cover', // div for display the album cover using input
-        displayList: '#playlist' // div for displaying the playlist filled with songs of sentence
+        displayList: '#playlist', // div for displaying the playlist filled with songs of sentence
+        hfToken: '#hidden_token'
     }
 
     return {
@@ -97,12 +101,50 @@ const UIController = (function () {
             // should hopefully add an image of the album cover to the div here
             const albumCover = document.querySelector(DOMElements.displayCover).innerHTML = html;
         },
-
         // need to be called multiple times? on how many words in strings
         createPlaylist(id, name) {
             const html = ``; // figure out the html display for the playlists.. follow createTrack
             document.querySelector(DOMElements.displayList).innerHTML+= `${name}&nbsp;`; // display the name? to create a sentence?
+        },
+        storeToken(value) {
+            document.querySelector(DOMElements.hfToken).value = value;
+        },
+
+        getStoredToken() {
+            return {
+                token: document.querySelector(DOMElements.hfToken).value
+            }
         }
+
     }
 
 })();
+
+// APP
+const APPController = (function(UiCtrl, ApiCtrl){
+
+    const DOMInputs = UiCtrl.inputField(); // get the objects of input fields?
+
+    const loadGenres = async () => {
+        const token = await ApiCtrl._getToken();
+
+        UiCtrl.storeToken(token);
+
+        const track = await ApiCtrl.getTrack(token, query); // need to figure out query here.
+    }
+
+
+    DOMInputs.sub_track.addEventListener('click', async () => {
+            const token = UiCtrl.getStoredToken().token;
+
+            
+
+
+    });
+
+
+})();
+
+
+
+
