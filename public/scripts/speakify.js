@@ -1,6 +1,6 @@
 // client side code for input?
+const playlist_button = "#bplaylist";
 const playlist_id = "#playlist";
-const acover_id = "#album_cover";
 // document.querySelector(playlist_id).addEventListener('click', () => {
 //     getInput(playlist_id);
 // });
@@ -9,10 +9,11 @@ const acover_id = "#album_cover";
 //     getInput(acover_id);
 // });
 
-document.querySelector(playlist_id).addEventListener('click',getInput);
+document.querySelector(playlist_button).addEventListener('click',getInput);
+
 
 function getInput(){
-    console.log("something happens".concat(this));
-    let input = document.querySelector(this.id).value.toLowerCase();
-    console.loog(input);    
+    // console.log("something happens".concat(this));
+    let input = document.querySelector(playlist_id).value;
+    console.log(input);    
     }
