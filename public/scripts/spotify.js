@@ -12,6 +12,7 @@
  *     node access-token-server.js "<Client ID>" "<Client Secret>"
  *
  *  and visit <http://localhost:8888/login> in your Browser.
+ * BQCYhb3zoTwLzmkw4IZcHByIYBg6SOdn2fHQI1CI93zuw8s6swquaVPxKn3Jtqu5VvVRvfDlaHQ2H-TDlu_i_aNfS0IPf3I15lO4LVgeSvBnUHTn_DpgBYCVCGT6EtKDzmLBJ47YiOt19VXBNd_d4NE66Za6lcU3Ibs-ac9zea4dvkF_TgNz783p9Y_WOkY4y7wj3qjW4uImgxcdpQAFXr3MGeaeO7V2V2oojlo2v1COS1knNzX4yEQ0UFMrjqhf9DU_WoJn3gQ5dBgibck83_f7
  */
 const SpotifyWebApi = require('../../');
 const express = require('../../node_modules/express');
