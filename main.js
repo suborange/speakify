@@ -19,10 +19,10 @@ app.get('/song', (req,response) => {
     response.render('song'); 
 });
 
-app.get('/album', (req,response) => {
+app.get('/genre', (req,response) => {
     // random album page
     // render the album page
-    response.render('album'); 
+    response.render('genre'); 
 });
 
 app.get('/cover', (req,response) => {

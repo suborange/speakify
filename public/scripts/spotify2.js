@@ -46,24 +46,33 @@ const APIController = (function () {
 
 const UIController = (function () {
     const DOMElements = {
-        getAlbum: '#get_album',
-        getSentence: '#get_sentence',
-        albumSubmit: '#sub_album',
-        playlistSubmit: '#sub_sentence',
-        displayTrack: '#random_song',
-        displayAlbum: '#random_album',
-        displayCover: '#display_cover',
-        displayList: '#playlist'
+        getAlbum: '#get_album', // input method for album cover
+        getSentence: '#get_sentence', // input method for sentence
+        albumSubmit: '#sub_album', // button for album cover input
+        sentanceSubmit: '#sub_sentence', // button for sentence input
+        trackSubmit: '#sub_track', // button for getting random track
+        genreSubmit: '#sub_genre', // buton for getting random genre
+        displayTrack: '#random_track', // div for displaying the returned song
+        displayGenre: '#random_genre', // div for displaying the returned genre
+        displayCover: '#display_cover', // div for display the album cover using input
+        displayList: '#playlist' // div for displaying the playlist filled with songs of sentence
     }
 
     return {
 
+        // not really sure what theses return to quite yet, obviously are the selected fields.
         inputField() {
             return {
-                album: document.querySelector(DOMElements.getAlbum),
-                sentence: document.querySelector(DOMElements.getSentence),
-                asubmit: document.querySelector(DOMElements.albumSubmit),
-                ssubmit: document.querySelector(DOMElements.playlistSubmit)
+                in_album: document.querySelector(DOMElements.getAlbum),
+                in_sentence: document.querySelector(DOMElements.getSentence),
+                sub_album: document.querySelector(DOMElements.albumSubmit),
+                sub_sentence: document.querySelector(DOMElements.sentanceSubmit),
+                sub_track: document.querySelector(DOMElements.trackSubmit),
+                sub_genre: document.querySelector(DOMElements.genreSubmit),
+                dis_ran_track: document.querySelector(DOMElements.displayTrack),
+                dis_ran_genre: document.querySelector(DOMElements.displayGenre),
+                dis_cover: document.querySelector(DOMElements.displayCover),
+                dis_playlist: document.querySelector(DOMElements.displayList),
             }
         },
 
@@ -87,11 +96,7 @@ const UIController = (function () {
         createPlaylist(id, name) {
             const html = ``; // figure out the html display for the playlists.. follow createTrack
             document.querySelector(DOMElements.displayList).innerHTML+= `${name}&nbsp;`; // display the name? to create a sentence?
-        },
-
-
-
+        }
     }
-
 
 })();
