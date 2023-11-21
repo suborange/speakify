@@ -30,10 +30,40 @@ div.container {
     display: flex;
 }
 
-.test {
-    border: 2.5px solid black;
-    border-radius: 4px;
+h2.album {
+    color: #1db954;
+    font-size: 2em;
+    font-family: 'Chakra Petch';
+    font-weight: 700;
+    margin: 10px;   
+
 }
+
+.button_shape {
+    margin: 10px;
+    background-color: #1db954;
+    color: white;
+    padding: 7px 15px;
+    border: none;
+    border-radius: 25px;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 4px 4px #191414;
+    font-size: 1.2em;    
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in;
+    transform: perspective(1px) translateZ(0);
+    backface-visibility: hidden;
+    filter: blur(.0px);
+  }
+  
+  .button_shape:hover {
+    transform: scale(1.04) perspective(1px) translateZ(0);
+    backface-visibility: hidden;
+    box-shadow: 4px 4px 4px #191414;
+    filter: blur(.0px);
+  }
+
 
 
 footer {
@@ -49,4 +79,9 @@ color:black;
 }
 .tcenter {
     text-align: center;
+}
+
+.test {
+    border: 2.5px solid black;
+    border-radius: 4px;
 }
