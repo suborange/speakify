@@ -2,10 +2,6 @@
 // for the sentence page only
 const APIController = (function () {
 
-    // const clientId = secret.ID;
-    // const clientSecret = secret.SECRET;
-    const clientId = "189cb2c4a3d94b80bc33f50a46322d9d";
-    const clientSecret = "af9d281b8ee748a2a97b37063b129886";
 
 
     const _getToken = async () => {
