@@ -1,4 +1,3 @@
-
 // for the song page only
 const APIController = (function () {
 
@@ -13,7 +12,6 @@ const APIController = (function () {
         console.log('random name? data:', data.tracks.items[0].name); // .album[0].name
         return data.tracks.items;
     }
-
     return {
         getTrack(t, q) { // token and query
             return _getTrack(t, q);
@@ -21,7 +19,6 @@ const APIController = (function () {
     }
 
 })();
-
 
 const UIController = (function () {
     const DOMElements = {
@@ -31,7 +28,6 @@ const UIController = (function () {
     }
 
     return {
-
         // not really sure what theses return to quite yet, obviously are the selected fields.
         inputField() {
             return {
