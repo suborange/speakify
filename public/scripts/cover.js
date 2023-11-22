@@ -22,48 +22,26 @@ const APIController = (function () {
         return data.access_token;
     }
 
-
-    // const query = 'chlorine'; // have to call this function multiple times, based off the string entered by user. 
-    // just get a returned track, fuck it if it doesnt work correctly/match the word
-    const _getTrack = async (token, query) => {
-
-        const result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track`, {
+    // get the related album, to display the album cover image
+    const _getCover = async (token, album_name) => {        
+        const result = await fetch(`https://api.spotify.com/v1/search?q=${album_name}&type=track`, {
             method: 'GET', headers: { 'Authorization': 'Bearer ' + token }
         });
         const data = await result.json();
         // console.log('track item data:', data.tracks.items);
-        console.log('random name? data:', data.tracks.items[0].name); // .album[0].name
+        console.log('album cover? data:', data.tracks.items[0]); // .album[0].name
         return data.tracks.items;
-    }
-    // return favorites instead of genre?
-
-
-    const _getFavorite = async (token) => {
-        const favorite_song_name = "Wish you were here";
-
-        const result = await fetch(`https://api.spotify.com/v1/search?q=${favorite_song_name}&type=track`, {
-            method: 'GET', headers: { 'Authorization': 'Bearer ' + token }
-        });
-        const data = await result.json();
-        // console.log('track item data:', data.tracks.items);
-        console.log('favorite name? data:', data.tracks.items[0].name); // .album[0].name
-        return data.tracks.items;
-
     }
 
     return {
-        getTrack(t, q) { // token and query
-            return _getTrack(t, q);
-        },
-        getFavorite(t) { // token
-            return _getFavorite(t);
+        getCover(t, a) {
+            return _getCover(t, a);
         },
         getToken() {
             return _getToken();
             // return acces_token;
         }
     }
-
 })();
 
 
@@ -76,43 +54,30 @@ const UIController = (function () {
     }
 
     return {
-
         // not really sure what theses return to quite yet, obviously are the selected fields.
         inputField() {
             return {
-                in_album: document.querySelector(DOMElements.getAlbum),                
+                in_album: document.querySelector(DOMElements.getAlbum).value,                
                 sub_album: document.querySelector(DOMElements.albumSubmit),                
                 dis_cover: document.querySelector(DOMElements.displayCover),
             }
         },
-
         // call once to display the cover
         displayCover(img) {
-            const html =
-                `<div class="row col-sm-12 px-0">
-                <img src="${img}" alt="">        
-            </div>`;
+            const html = `<img src="${img}" alt="">`;
 
             // should hopefully add an image of the album cover to the div here
-            const albumCover = document.querySelector(DOMElements.displayCover).innerHTML = html;
-        },
-        // need to be called multiple times? on how many words in strings
-        createPlaylist(id, name) {
-            const html = ``; // figure out the html display for the playlists.. follow createTrack
-            document.querySelector(DOMElements.displayList).innerHTML += `${name}&nbsp;`; // display the name? to create a sentence?
+            document.querySelector(DOMElements.displayCover).innerHTML = html;
         },
         storeToken(value) {
             document.querySelector(DOMElements.hfToken).value = value;
         },
-
         getStoredToken() {
             return {
                 token: document.querySelector(DOMElements.hfToken).value
             }
         }
-
     }
-
 })();
 
 // APP
@@ -128,27 +93,14 @@ const APPController = (function (UiCtrl, ApiCtrl) {
 
         // const track = await ApiCtrl.getTrack(token, query); // need to figure out query here.
     }
+    
 
-    // random track - for now not random?
-    DOMInputs.sub_track.addEventListener('click', async () => {
+    DOMInputs.sub_album.addEventListener('click', async () => {
         const token = UiCtrl.getStoredToken().token;
 
-        const query = "Chlorine";
-        const track = await ApiCtrl.getTrack(token, query);
-        console.log("APP track: ", track);
-        UiCtrl.randTrack(track[0].name, track[0], track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
-
-
-    });
-
-    DOMInputs.sub_fav.addEventListener('click', async () => {
-        const token = UiCtrl.getStoredToken().token;
-
-        const track = await ApiCtrl.getFavorite(token);
-        console.log("APP track: ", track);
-        UiCtrl.favorite(track[0].name, track[0], track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
-
-
+        const album = await ApiCtrl.getCover(token, DOMInputs.in_album); // should have input of the album
+        console.log("album info: ",album.images.url);
+        UiCtrl.displayCover(album.images.url); // album image
     });
 
 
@@ -161,7 +113,7 @@ const APPController = (function (UiCtrl, ApiCtrl) {
 
 })(UIController, APIController);
 
-APPController.init(); // what will this do for me?
+// APPController.init(); // what will this do for me?
 
 
 

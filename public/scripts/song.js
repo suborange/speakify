@@ -2,27 +2,6 @@
 // for the song page only
 const APIController = (function () {
 
-    // const clientId = secret.ID;
-    // const clientSecret = secret.SECRET;
-    const clientId = "189cb2c4a3d94b80bc33f50a46322d9d";
-    const clientSecret = "af9d281b8ee748a2a97b37063b129886";
-
-    const _getToken = async () => {
-        const result = await fetch('https://accounts.spotify.com/api/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
-            },
-            body: 'grant_type=client_credentials'
-        });
-        const data = await result.json();
-        console.log("token1", data.access_token);
-        return data.access_token;
-    }
-
-
-
     // just get a returned track, fuck it if it doesnt work correctly/match the word
     const _getTrack = async (token, query) => {
 
@@ -39,10 +18,6 @@ const APIController = (function () {
         getTrack(t, q) { // token and query
             return _getTrack(t, q);
         },
-        getToken() {
-            return _getToken();
-            // return acces_token;
-        }
     }
 
 })();
@@ -68,9 +43,6 @@ const UIController = (function () {
             const html = `Random: title:${name}; artist: ${artist}; album:${album}`;
             document.querySelector(DOMElements.displayTrack).innerHTML = html; // or ${} idk
         },
-        storeToken(value) {
-            document.querySelector(DOMElements.hfToken).value = value;
-        },
         getStoredToken() {
             return {
                 token: document.querySelector(DOMElements.hfToken).value
@@ -84,15 +56,6 @@ const UIController = (function () {
 const APPController = (function (UiCtrl, ApiCtrl) {
 
     const DOMInputs = UiCtrl.inputField(); // get the objects of input fields?
-
-    const loadPage = async () => {
-        const token = await ApiCtrl.getToken();
-        // console.log("on load", token);
-
-        UiCtrl.storeToken(token);
-
-        // const track = await ApiCtrl.getTrack(token, query); // need to figure out query here.
-    }
 
     // random track - for now not random?
     DOMInputs.sub_track.addEventListener('click', async () => {
@@ -113,7 +76,7 @@ const APPController = (function (UiCtrl, ApiCtrl) {
 
 })(UIController, APIController);
 
-APPController.init(); // what will this do for me?
+
 
 
 

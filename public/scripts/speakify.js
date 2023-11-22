@@ -92,12 +92,6 @@ const UIController = (function () {
         },
 
         // maybe change back to album.. 
-        // randGenre(genre) {
-        //     const html = `Random genre: ${genre}`;
-        //     document.querySelector(DOMElements.displayGenre).innerHTML = html;
-        // },
-
-        // maybe change back to album.. 
         favorite(name, artist, album) {
             const html = `Favorite: title:${name}; artist: ${artist}; album:${album}`;
             document.querySelector(DOMElements.displayGenre).innerHTML = html;
@@ -178,7 +172,7 @@ const APPController = (function (UiCtrl, ApiCtrl) {
 
 })(UIController, APIController);
 
-APPController.init(); // what will this do for me?
+// APPController.init(); // what will this do for me?
 
 
 

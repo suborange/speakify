@@ -119,7 +119,7 @@ const APPController = (function (UiCtrl, ApiCtrl) {
 
 })(UIController, APIController);
 
-APPController.init(); // what will this do for me?
+// APPController.init(); // what will this do for me?
 
 
 
