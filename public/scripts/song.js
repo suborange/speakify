@@ -5,14 +5,14 @@ const APIController = (function () {
     // const clientId = secret.ID;
     // const clientSecret = secret.SECRET;
     const clientId = "189cb2c4a3d94b80bc33f50a46322d9d";
-    const clientSecret = "af9d281b8ee748a2a97b37063b129886";    
+    const clientSecret = "af9d281b8ee748a2a97b37063b129886";
 
     const _getToken = async () => {
-         const result = await fetch('https://accounts.spotify.com/api/token', {
+        const result = await fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
             headers: {
-                'Content-Type' : 'application/x-www-form-urlencoded', 
-                'Authorization' : 'Basic ' + btoa(clientId + ':' + clientSecret)
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
             },
             body: 'grant_type=client_credentials'
         });
@@ -22,7 +22,7 @@ const APIController = (function () {
     }
 
 
-    
+
     // just get a returned track, fuck it if it doesnt work correctly/match the word
     const _getTrack = async (token, query) => {
 
@@ -40,7 +40,7 @@ const APIController = (function () {
             return _getTrack(t, q);
         },
         getToken() {
-            return _getToken();        
+            return _getToken();
             // return acces_token;
         }
     }
@@ -59,15 +59,15 @@ const UIController = (function () {
 
         // not really sure what theses return to quite yet, obviously are the selected fields.
         inputField() {
-            return {                
-                sub_track: document.querySelector(DOMElements.trackSubmit),               
-                dis_ran_track: document.querySelector(DOMElements.displayTrack),               
+            return {
+                sub_track: document.querySelector(DOMElements.trackSubmit),
+                dis_ran_track: document.querySelector(DOMElements.displayTrack),
             }
         },
         randTrack(name, artist, album) {
             const html = `Random: title:${name}; artist: ${artist}; album:${album}`;
             document.querySelector(DOMElements.displayTrack).innerHTML = html; // or ${} idk
-        },          
+        },
         storeToken(value) {
             document.querySelector(DOMElements.hfToken).value = value;
         },
@@ -81,7 +81,7 @@ const UIController = (function () {
 })();
 
 // APP
-const APPController = (function(UiCtrl, ApiCtrl){
+const APPController = (function (UiCtrl, ApiCtrl) {
 
     const DOMInputs = UiCtrl.inputField(); // get the objects of input fields?
 
@@ -96,13 +96,13 @@ const APPController = (function(UiCtrl, ApiCtrl){
 
     // random track - for now not random?
     DOMInputs.sub_track.addEventListener('click', async () => {
-            const token = UiCtrl.getStoredToken().token;            
+        const token = UiCtrl.getStoredToken().token;
 
-            const query = "Chlorine";
-            const track = await ApiCtrl.getTrack(token, query);
-            console.log("APP track: ",track);
-            UiCtrl.randTrack(track[0].name,track[0] ,track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
-    });   
+        const query = "Chlorine";
+        const track = await ApiCtrl.getTrack(token, query);
+        console.log("APP track: ", track);
+        UiCtrl.randTrack(track[0].name, track[0], track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
+    });
 
     return {
         init() {

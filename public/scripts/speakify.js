@@ -6,19 +6,19 @@ const APIController = (function () {
     // const clientSecret = secret.SECRET;
     const clientId = "189cb2c4a3d94b80bc33f50a46322d9d";
     const clientSecret = "af9d281b8ee748a2a97b37063b129886";
-    
+
 
     const _getToken = async () => {
-         const result = await fetch('https://accounts.spotify.com/api/token', {
+        const result = await fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
             headers: {
-                'Content-Type' : 'application/x-www-form-urlencoded', 
-                'Authorization' : 'Basic ' + btoa(clientId + ':' + clientSecret)
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
             },
             body: 'grant_type=client_credentials'
         });
         const data = await result.json();
-        console.log("token1", data.access_token);
+        // console.log("token1", data.access_token);
         return data.access_token;
     }
 
@@ -59,7 +59,7 @@ const APIController = (function () {
             return _getFavorite(t);
         },
         getToken() {
-            return _getToken();        
+            return _getToken();
             // return acces_token;
         }
     }
@@ -68,18 +68,9 @@ const APIController = (function () {
 
 
 const UIController = (function () {
-    const DOMElements = {
-        getAlbum: '#get_album', // input method for album cover
-        getSentence: '#get_sentence', // input method for sentence
-        albumSubmit: '#sub_album', // button for album cover input
-        sentanceSubmit: '#sub_sentence', // button for sentence input
-        trackSubmit: '#sub_track', // button for getting random track
-        genreSubmit: '#sub_genre', // buton for getting random genre
-        favSubmit: '#sub_fav', // button for getting favorite song
-        displayTrack: '#random_track', // div for displaying the returned song
-        displayGenre: '#random_genre', // div for displaying the returned genre
-        displayFavorite: '#display_fav', // div for displaying favorite song
-        displayCover: '#display_cover', // div for display the album cover using input
+    const DOMElements = {      
+        getSentence: '#get_sentence', // input method for sentence        
+        sentanceSubmit: '#sub_sentence', // button for sentence input       
         displayList: '#display_playlist', // div for displaying the playlist filled with songs of sentence
         hfToken: '#hidden_token'
     }
@@ -88,18 +79,9 @@ const UIController = (function () {
 
         // not really sure what theses return to quite yet, obviously are the selected fields.
         inputField() {
-            return {
-                in_album: document.querySelector(DOMElements.getAlbum),
-                in_sentence: document.querySelector(DOMElements.getSentence),
-                sub_album: document.querySelector(DOMElements.albumSubmit),
-                sub_sentence: document.querySelector(DOMElements.sentanceSubmit),
-                sub_track: document.querySelector(DOMElements.trackSubmit),
-                sub_genre: document.querySelector(DOMElements.genreSubmit),
-                sub_fav: document.querySelector(DOMElements.favSubmit),
-                dis_ran_track: document.querySelector(DOMElements.displayTrack),
-                dis_ran_genre: document.querySelector(DOMElements.displayGenre),
-                dis_favorite: document.querySelector(DOMElements.displayFavorite),
-                dis_cover: document.querySelector(DOMElements.displayCover),
+            return {              
+                in_sentence: document.querySelector(DOMElements.getSentence),             
+                sub_sentence: document.querySelector(DOMElements.sentanceSubmit),               
                 dis_playlist: document.querySelector(DOMElements.displayList),
             }
         },
@@ -108,14 +90,14 @@ const UIController = (function () {
             const html = `Random: title:${name}; artist: ${artist}; album:${album}`;
             document.querySelector(DOMElements.displayTrack).innerHTML = html; // or ${} idk
         },
-        
+
         // maybe change back to album.. 
         // randGenre(genre) {
         //     const html = `Random genre: ${genre}`;
         //     document.querySelector(DOMElements.displayGenre).innerHTML = html;
         // },
 
-          // maybe change back to album.. 
+        // maybe change back to album.. 
         favorite(name, artist, album) {
             const html = `Favorite: title:${name}; artist: ${artist}; album:${album}`;
             document.querySelector(DOMElements.displayGenre).innerHTML = html;
@@ -123,8 +105,8 @@ const UIController = (function () {
 
         // call once to display the cover
         displayCover(img) {
-            const html = 
-            `<div class="row col-sm-12 px-0">
+            const html =
+                `<div class="row col-sm-12 px-0">
                 <img src="${img}" alt="">        
             </div>`;
 
@@ -134,7 +116,7 @@ const UIController = (function () {
         // need to be called multiple times? on how many words in strings
         createPlaylist(id, name) {
             const html = ``; // figure out the html display for the playlists.. follow createTrack
-            document.querySelector(DOMElements.displayList).innerHTML+= `${name}&nbsp;`; // display the name? to create a sentence?
+            document.querySelector(DOMElements.displayList).innerHTML += `${name}&nbsp;`; // display the name? to create a sentence?
         },
         storeToken(value) {
             document.querySelector(DOMElements.hfToken).value = value;
@@ -151,7 +133,7 @@ const UIController = (function () {
 })();
 
 // APP
-const APPController = (function(UiCtrl, ApiCtrl){
+const APPController = (function (UiCtrl, ApiCtrl) {
 
     const DOMInputs = UiCtrl.inputField(); // get the objects of input fields?
 
@@ -166,25 +148,25 @@ const APPController = (function(UiCtrl, ApiCtrl){
 
     // random track - for now not random?
     DOMInputs.sub_track.addEventListener('click', async () => {
-            const token = UiCtrl.getStoredToken().token;            
+        const token = UiCtrl.getStoredToken().token;
 
-            const query = "Chlorine";
-            const track = await ApiCtrl.getTrack(token, query);
-            console.log("APP track: ",track);
-            UiCtrl.randTrack(track[0].name,track[0] ,track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
+        const query = "Chlorine";
+        const track = await ApiCtrl.getTrack(token, query);
+        console.log("APP track: ", track);
+        UiCtrl.randTrack(track[0].name, track[0], track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
 
 
     });
 
     DOMInputs.sub_fav.addEventListener('click', async () => {
-        const token = UiCtrl.getStoredToken().token;            
-        
+        const token = UiCtrl.getStoredToken().token;
+
         const track = await ApiCtrl.getFavorite(token);
-        console.log("APP track: ",track);
-        UiCtrl.favorite(track[0].name,track[0] ,track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
+        console.log("APP track: ", track);
+        UiCtrl.favorite(track[0].name, track[0], track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
 
 
-});
+    });
 
 
     return {
