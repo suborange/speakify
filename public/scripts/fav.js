@@ -1,16 +1,12 @@
-// grab secret data from file
-// const file_io = require('fs'); // for file input and output
-// const { load } = require('mime');
-// read static secrets and parse them into an object -> obj.field
-// let secretdata = file_io.readFileSync('.secret.json');
-// const secret = JSON.parse(secretdata);
+
+// for the favorite page only
 const APIController = (function () {
 
     // const clientId = secret.ID;
     // const clientSecret = secret.SECRET;
     const clientId = "189cb2c4a3d94b80bc33f50a46322d9d";
     const clientSecret = "af9d281b8ee748a2a97b37063b129886";
-    let acces_token = "something"; 
+    
 
     const _getToken = async () => {
          const result = await fetch('https://accounts.spotify.com/api/token', {
@@ -22,31 +18,26 @@ const APIController = (function () {
             body: 'grant_type=client_credentials'
         });
         const data = await result.json();
-        // console.log("token1", data.access_token);
-        // acces_token = data.acces_token;
-        
+        console.log("token1", data.access_token);
         return data.access_token;
     }
 
+    // return favorites instead of genre?
+    const _getFavorite = async (token) => {
+        const favorite_song_name = "Wish you were here";
 
-    // const query = 'chlorine'; // have to call this function multiple times, based off the string entered by user. 
-    // just get a returned track, fuck it if it doesnt work correctly/match the word
-    const _getTrack = async (token, query) => {
-
-        const result = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track`, {
+        const result = await fetch(`https://api.spotify.com/v1/search?q=${favorite_song_name}&type=track`, {
             method: 'GET', headers: { 'Authorization': 'Bearer ' + token }
         });
         const data = await result.json();
-        console.log('track item data:', data.tracks.items);
-        console.log('song name? data:', data.tracks.items[0].name); // .album[0].name
+        // console.log('track item data:', data.tracks.items);
+        console.log('favorite name? data:', data.tracks.items[0].name); // .album[0].name
         return data.tracks.items;
     }
-    // return favorites instead of genre?
-
 
     return {
-        getTrack(t, q) {
-            return _getTrack(t, q);
+        getFavorite(t) { // token
+            return _getFavorite(t);
         },
         getToken() {
             return _getToken();        
@@ -59,16 +50,8 @@ const APIController = (function () {
 
 const UIController = (function () {
     const DOMElements = {
-        getAlbum: '#get_album', // input method for album cover
-        getSentence: '#get_sentence', // input method for sentence
-        albumSubmit: '#sub_album', // button for album cover input
-        sentanceSubmit: '#sub_sentence', // button for sentence input
-        trackSubmit: '#sub_track', // button for getting random track
-        genreSubmit: '#sub_genre', // buton for getting random genre
-        displayTrack: '#random_track', // div for displaying the returned song
-        displayGenre: '#random_genre', // div for displaying the returned genre
-        displayCover: '#display_cover', // div for display the album cover using input
-        displayList: '#playlist', // div for displaying the playlist filled with songs of sentence
+        favSubmit: '#sub_fav', // button for getting favorite song        
+        displayFavorite: '#display_fav', // div for displaying favorite song       
         hfToken: '#hidden_token'
     }
 
@@ -83,21 +66,29 @@ const UIController = (function () {
                 sub_sentence: document.querySelector(DOMElements.sentanceSubmit),
                 sub_track: document.querySelector(DOMElements.trackSubmit),
                 sub_genre: document.querySelector(DOMElements.genreSubmit),
+                sub_fav: document.querySelector(DOMElements.favSubmit),
                 dis_ran_track: document.querySelector(DOMElements.displayTrack),
                 dis_ran_genre: document.querySelector(DOMElements.displayGenre),
+                dis_favorite: document.querySelector(DOMElements.displayFavorite),
                 dis_cover: document.querySelector(DOMElements.displayCover),
                 dis_playlist: document.querySelector(DOMElements.displayList),
             }
         },
 
-        randTrack(name) {
-            const html = `Random song: ${name}`;
+        randTrack(name, artist, album) {
+            const html = `Random: title:${name}; artist: ${artist}; album:${album}`;
             document.querySelector(DOMElements.displayTrack).innerHTML = html; // or ${} idk
         },
         
         // maybe change back to album.. 
-        randGenre(genre) {
-            const html = `Random genre: ${genre}`;
+        // randGenre(genre) {
+        //     const html = `Random genre: ${genre}`;
+        //     document.querySelector(DOMElements.displayGenre).innerHTML = html;
+        // },
+
+          // maybe change back to album.. 
+        favorite(name, artist, album) {
+            const html = `Favorite: title:${name}; artist: ${artist}; album:${album}`;
             document.querySelector(DOMElements.displayGenre).innerHTML = html;
         },
 
@@ -144,7 +135,6 @@ const APPController = (function(UiCtrl, ApiCtrl){
         // const track = await ApiCtrl.getTrack(token, query); // need to figure out query here.
     }
 
-
     // random track - for now not random?
     DOMInputs.sub_track.addEventListener('click', async () => {
             const token = UiCtrl.getStoredToken().token;            
@@ -152,10 +142,20 @@ const APPController = (function(UiCtrl, ApiCtrl){
             const query = "Chlorine";
             const track = await ApiCtrl.getTrack(token, query);
             console.log("APP track: ",track);
-            UiCtrl.randTrack(track.name); // hopefully sends the name to the track to be displayed?
+            UiCtrl.randTrack(track[0].name,track[0] ,track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
 
 
     });
+
+    DOMInputs.sub_fav.addEventListener('click', async () => {
+        const token = UiCtrl.getStoredToken().token;            
+        
+        const track = await ApiCtrl.getFavorite(token);
+        console.log("APP track: ",track);
+        UiCtrl.favorite(track[0].name,track[0] ,track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
+
+
+});
 
 
     return {

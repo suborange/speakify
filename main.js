@@ -19,10 +19,16 @@ app.get('/song', (req,response) => {
     response.render('song'); 
 });
 
-app.get('/genre', (req,response) => {
-    // random album page
-    // render the album page
-    response.render('genre'); 
+// app.get('/genre', (req,response) => {
+//     // random album page
+//     // render the album page
+//     response.render('genre'); 
+// });
+
+app.get('/favorite', (req,response) => {
+    // favorite page
+    // render the favorite page
+    response.render('favorite'); 
 });
 
 app.get('/cover', (req,response) => {
@@ -38,6 +44,6 @@ app.get('/sentence', (req,response) => {
 });
 
 app.listen(3000, ()=> {
-    console.log('started server on :3000');
+    console.log('started server on: 3000');
 });
 
