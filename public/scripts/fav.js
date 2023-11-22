@@ -46,8 +46,8 @@ const UIController = (function () {
 
         // maybe change back to album.. 
         favorite(name, artist, album) {
-            const html = `Favorite: title:${name}; artist: ${artist}; album:${album}`;
-            document.querySelector(DOMElements.displayGenre).innerHTML = html;
+            const html = `Title: <span class="green">${name}</span>; Artist: <span class="green">${artist}</span>; Album: <span class="green">${album}</span>`;
+            document.querySelector(DOMElements.displayFavorite).innerHTML = html;
         },
 
         getStoredToken() {

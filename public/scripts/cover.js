@@ -36,7 +36,7 @@ const UIController = (function () {
         // not really sure what theses return to quite yet, obviously are the selected fields.
         inputField() {
             return {
-                in_album: document.querySelector(DOMElements.getAlbum).value,                
+                in_album: document.querySelector(DOMElements.getAlbum),                
                 sub_album: document.querySelector(DOMElements.albumSubmit),                
                 dis_cover: document.querySelector(DOMElements.displayCover),
             }
@@ -73,8 +73,8 @@ const APPController = (function (UiCtrl, ApiCtrl) {
 
     DOMInputs.sub_album.addEventListener('click', async () => {
         const token = UiCtrl.getStoredToken().token;
-        console.log("what is this", DOMInputs.in_album);
-        const album = await ApiCtrl.getCover(token, DOMInputs.in_album.toString()); // should have input of the album
+        console.log("what is this", DOMInputs.in_album.value);
+        const album = await ApiCtrl.getCover(token, DOMInputs.in_album.value); // should have input of the album
         console.log("album info: ",album.images.url);
         UiCtrl.displayCover(album.images.url); // album image
     });

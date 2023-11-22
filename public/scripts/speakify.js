@@ -66,7 +66,7 @@ const UIController = (function () {
         // not really sure what theses return to quite yet, obviously are the selected fields.
         inputField() {
             return {              
-                in_sentence: document.querySelector(DOMElements.getSentence).value,             
+                in_sentence: document.querySelector(DOMElements.getSentence),             
                 sub_sentence: document.querySelector(DOMElements.sentanceSubmit),               
                 dis_playlist: document.querySelector(DOMElements.displayList),
             }
@@ -101,33 +101,14 @@ const APPController = (function (UiCtrl, ApiCtrl) {
         // const track = await ApiCtrl.getTrack(token, query); // need to figure out query here.
     }
 
-    // random track - for now not random?
-    DOMInputs.sub_track.addEventListener('click', async () => {
-        const token = UiCtrl.getStoredToken().token;
-
-        const query = "Chlorine";
-        const track = await ApiCtrl.getTrack(token, query);
-        console.log("APP track: ", track);
-        UiCtrl.randTrack(track[0].name, track[0], track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
-
-
-    });
-
-    DOMInputs.sub_fav.addEventListener('click', async () => {
-        const token = UiCtrl.getStoredToken().token;
-
-        const track = await ApiCtrl.getFavorite(token);
-        console.log("APP track: ", track);
-        UiCtrl.favorite(track[0].name, track[0], track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
-
-
-    });
-
+    
     DOMInputs.sub_sentence.addEventListener('click', async () => {
         const token = UiCtrl.getStoredToken().token;
 // loop through and get each of the tracks from the string
 
-        const sentence = DOMInputs.in_sentence.split(" "); // split the sentence by space
+        const sentence = DOMInputs.in_sentence.value;
+        console.log("sentance here:" + sentence);
+        sentence = sentence.split(" "); // split the sentence by space
         for (word of sentence){
             // get the track for the word
             const track = await ApiCtrl.getTrack(token, word);
