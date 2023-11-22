@@ -48,9 +48,6 @@ const UIController = (function () {
             // should hopefully add an image of the album cover to the div here
             document.querySelector(DOMElements.displayCover).innerHTML = html;
         },
-        storeToken(value) {
-            document.querySelector(DOMElements.hfToken).value = value;
-        },
         getStoredToken() {
             return {
                 token: document.querySelector(DOMElements.hfToken).value

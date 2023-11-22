@@ -13,8 +13,29 @@ const APIController = (function () {
         console.log('random name? data:', data.tracks.items[0].name); // .album[0].name
         return data.tracks.items;
     }
-    // return favorites instead of genre?
+ 
+    // get the playlist to append to
+    const _appendPlaylist = async (token, playlist_id) => {
+        const result = await fetch(`https://api.spotify.com/v1/playlists/${playlist_id}/tracks`, {
+            method: 'GET', headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await result.json();
+        // console.log('track item data:', data.tracks.items);
+        console.log('playlist? data:', data); // .album[0].name
+        return data;
+    }
 
+    // get the playlist to display on the webpage
+    const _getPlaylist = async (token, playlist_id) => {
+        const result = await fetch(`https://api.spotify.com/v1/playlists/${playlist_id}`, {
+            method: 'GET', headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await result.json();
+        // console.log('track item data:', data.tracks.items);
+        console.log('playlist? data:', data); // .album[0].name
+        return data;
+
+    }
 
     return {
         getTrack(t, q) { // token and query
@@ -45,42 +66,17 @@ const UIController = (function () {
         // not really sure what theses return to quite yet, obviously are the selected fields.
         inputField() {
             return {              
-                in_sentence: document.querySelector(DOMElements.getSentence),             
+                in_sentence: document.querySelector(DOMElements.getSentence).value,             
                 sub_sentence: document.querySelector(DOMElements.sentanceSubmit),               
                 dis_playlist: document.querySelector(DOMElements.displayList),
             }
         },
 
-        randTrack(name, artist, album) {
-            const html = `Random: title:${name}; artist: ${artist}; album:${album}`;
-            document.querySelector(DOMElements.displayTrack).innerHTML = html; // or ${} idk
-        },
-
-        // maybe change back to album.. 
-        favorite(name, artist, album) {
-            const html = `Favorite: title:${name}; artist: ${artist}; album:${album}`;
-            document.querySelector(DOMElements.displayGenre).innerHTML = html;
-        },
-
-        // call once to display the cover
-        displayCover(img) {
-            const html =
-                `<div class="row col-sm-12 px-0">
-                <img src="${img}" alt="">        
-            </div>`;
-
-            // should hopefully add an image of the album cover to the div here
-            const albumCover = document.querySelector(DOMElements.displayCover).innerHTML = html;
-        },
-        // need to be called multiple times? on how many words in strings
-        createPlaylist(id, name) {
-            const html = ``; // figure out the html display for the playlists.. follow createTrack
-            document.querySelector(DOMElements.displayList).innerHTML += `${name}&nbsp;`; // display the name? to create a sentence?
-        },
-        storeToken(value) {
-            document.querySelector(DOMElements.hfToken).value = value;
-        },
-
+        displayPlaylist() {
+            // 61XhLq3wZGTZkWFaTy4WPA
+            const html =`<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/61XhLq3wZGTZkWFaTy4WPA?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+            document.querySelector(DOMElements.displayList).innerHTML = html;
+        },   
         getStoredToken() {
             return {
                 token: document.querySelector(DOMElements.hfToken).value
@@ -127,6 +123,19 @@ const APPController = (function (UiCtrl, ApiCtrl) {
 
     });
 
+    DOMInputs.sub_sentence.addEventListener('click', async () => {
+        const token = UiCtrl.getStoredToken().token;
+// loop through and get each of the tracks from the string
+
+        const sentence = DOMInputs.in_sentence.split(" "); // split the sentence by space
+        for (word of sentence){
+            // get the track for the word
+            const track = await ApiCtrl.getTrack(token, word);
+            console.log("word:" + word + "track" + track[0].name);           
+
+        }
+        UiCtrl.displayList(); // now somehow display the playlist? maybe after adding songs it should display the iframe correctly?
+    });
 
     return {
         init() {

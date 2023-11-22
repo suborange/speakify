@@ -50,10 +50,6 @@ const UIController = (function () {
             document.querySelector(DOMElements.displayGenre).innerHTML = html;
         },
 
-        storeToken(value) {
-            document.querySelector(DOMElements.hfToken).value = value;
-        },
-
         getStoredToken() {
             return {
                 token: document.querySelector(DOMElements.hfToken).value
