@@ -44,7 +44,6 @@ const UIController = (function () {
         // call once to display the cover
         displayCover(img) {
             const html = `<img src="${img}" alt="">`;
-
             // should hopefully add an image of the album cover to the div here
             document.querySelector(DOMElements.displayCover).innerHTML = html;
         },
@@ -75,8 +74,8 @@ const APPController = (function (UiCtrl, ApiCtrl) {
         const token = UiCtrl.getStoredToken().token;
         console.log("what is this", DOMInputs.in_album.value);
         const album = await ApiCtrl.getCover(token, DOMInputs.in_album.value); // should have input of the album
-        console.log("album info: ",album.images.url);
-        UiCtrl.displayCover(album.images.url); // album image
+        console.log("album info: ",album[0].album.images[1].url);
+        UiCtrl.displayCover(album[0].album.images[1].url); // album image
     });
 
 
