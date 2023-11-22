@@ -1,6 +1,6 @@
 
 // for the song page only
-const APIController = (function () {
+const MainAPIController = (function () {
 
     // const clientId = secret.ID;
     // const clientSecret = secret.SECRET;
@@ -31,7 +31,7 @@ const APIController = (function () {
 })();
 
 
-const UIController = (function () {
+const MainUIController = (function () {
     const DOMElements = {     
         hfToken: '#hidden_token'
     }
@@ -50,7 +50,7 @@ const UIController = (function () {
 })();
 
 // APP
-const APPController = (function (UiCtrl, ApiCtrl) {
+const MainAPPController = (function (UiCtrl, ApiCtrl) {
     const loadPage = async () => {
         const token = await ApiCtrl.getToken();
         // console.log("on load", token);
@@ -66,9 +66,9 @@ const APPController = (function (UiCtrl, ApiCtrl) {
         }
     }
 
-})(UIController, APIController);
+})(MainUIController, MainAPIController);
 
-APPController.init(); // initialize the access key for the hour session.
+MainAPPController.init(); // initialize the access key for the hour session.
 
 
 

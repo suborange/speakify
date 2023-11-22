@@ -73,8 +73,8 @@ const APPController = (function (UiCtrl, ApiCtrl) {
 
     DOMInputs.sub_album.addEventListener('click', async () => {
         const token = UiCtrl.getStoredToken().token;
-
-        const album = await ApiCtrl.getCover(token, DOMInputs.in_album); // should have input of the album
+        console.log("what is this", DOMInputs.in_album);
+        const album = await ApiCtrl.getCover(token, DOMInputs.in_album.toString()); // should have input of the album
         console.log("album info: ",album.images.url);
         UiCtrl.displayCover(album.images.url); // album image
     });

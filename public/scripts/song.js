@@ -36,7 +36,7 @@ const UIController = (function () {
             }
         },
         randTrack(name, artist, album) {
-            const html = `Random: title:${name}; artist: ${artist}; album:${album}`;
+            const html = `Title: <span class="green">${name}</span>; Artist: <span class="green">${artist}</span>; Album: <span class="green">${album}</span>`;
             document.querySelector(DOMElements.displayTrack).innerHTML = html; // or ${} idk
         },
         getStoredToken() {
@@ -60,7 +60,7 @@ const APPController = (function (UiCtrl, ApiCtrl) {
         const query = "Chlorine";
         const track = await ApiCtrl.getTrack(token, query);
         console.log("APP track: ", track);
-        UiCtrl.randTrack(track[0].name, track[0], track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
+        UiCtrl.randTrack(track[0].name, track[0].artists[0].name, track[0].album.name ); // hopefully sends the name to the track to be displayed?
     });
 
     return {

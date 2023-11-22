@@ -79,7 +79,7 @@ const APPController = (function (UiCtrl, ApiCtrl) {
 
         const track = await ApiCtrl.getFavorite(token);
         console.log("APP track: ", track);
-        UiCtrl.favorite(track[0].name, track[0], track[0].artists[0].name); // hopefully sends the name to the track to be displayed?
+        UiCtrl.favorite(track[0].name, track[0].artists[0].name, track[0].album.name); // hopefully sends the name to the track to be displayed?
 
 
     });
