@@ -15,34 +15,47 @@ const APIController = (function () {
     }
  
     // get the playlist to append to
-    const _appendPlaylist = async (token, playlist_id) => {
+    // v1/playlists/${playlist.id}/tracks?uris=${tracksUri.join(',')}
+    const _appendPlaylist = async (token, playlist_id, tracksUri) => {
+        console.log("appending: ", tracksUri)
+        const result = await fetch(`https://api.spotify.com/v1/playlists/${playlist_id}/tracks?uris=${tracksUri.join(',')}`, {
+            method: 'POST', headers: { 'Authorization': 'Bearer ' + token }
+        });
+ 
+    }
+
+    const _deletePlaylist = async (token, playlist_id) => {
         const result = await fetch(`https://api.spotify.com/v1/playlists/${playlist_id}/tracks`, {
-            method: 'GET', headers: { 'Authorization': 'Bearer ' + token }
+            method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token }
         });
-        const data = await result.json();
-        // console.log('track item data:', data.tracks.items);
-        console.log('playlist? data:', data); // .album[0].name
-        return data;
-    }
-
-    // get the playlist to display on the webpage
-    const _getPlaylist = async (token, playlist_id) => {
-        const result = await fetch(`https://api.spotify.com/v1/playlists/${playlist_id}`, {
-            method: 'GET', headers: { 'Authorization': 'Bearer ' + token }
-        });
-        const data = await result.json();
-        // console.log('track item data:', data.tracks.items);
-        console.log('playlist? data:', data); // .album[0].name
-        return data;
+      
 
     }
+
+    // // get the playlist to display on the webpage
+    // const _getPlaylist = async (token, playlist_id) => {
+    //     const result = await fetch(`https://api.spotify.com/v1/playlists/${playlist_id}`, {
+    //         method: 'GET', headers: { 'Authorization': 'Bearer ' + token }
+    //     });
+    //     const data = await result.json();
+    //     // console.log('track item data:', data.tracks.items);
+    //     console.log('playlist? data:', data); // .album[0].name
+    //     return data;
+
+    // }
 
     return {
+        // getPlaylist() {
+        //     return _getPlaylist;
+        // },
         getTrack(t, q) { // token and query
             return _getTrack(t, q);
         },
-        getFavorite(t) { // token
-            return _getFavorite(t);
+        appendPlaylist(t, p, u){
+            return _appendPlaylist(t, p ,u);
+        },
+        deletePlaylist(t,p){
+            return _deletePlaylist(t,p);
         },
         getToken() {
             return _getToken();
@@ -70,7 +83,7 @@ const UIController = (function () {
                 sub_sentence: document.querySelector(DOMElements.sentanceSubmit),               
                 dis_playlist: document.querySelector(DOMElements.displayList),
             }
-        },
+        },        
 
         displayPlaylist() {
             // 61XhLq3wZGTZkWFaTy4WPA
@@ -104,18 +117,24 @@ const APPController = (function (UiCtrl, ApiCtrl) {
     
     DOMInputs.sub_sentence.addEventListener('click', async () => {
         const token = UiCtrl.getStoredToken().token;
+        const playlistid = '61XhLq3wZGTZkWFaTy4WPA';
 // loop through and get each of the tracks from the string
 
-        const sentence = DOMInputs.in_sentence.value;
-        console.log("sentance here:" + sentence);
+        let sentence = DOMInputs.in_sentence.value;        
         sentence = sentence.split(" "); // split the sentence by space
+        console.log("sentance here:" + sentence);
+        let trackUris = [];
         for (word of sentence){
             // get the track for the word
             const track = await ApiCtrl.getTrack(token, word);
-            console.log("word:" + word + "track" + track[0].name);           
-
+            
+            trackUris.push(track[0].uri);
+            console.log("word: " + word + "; track: ", track);    
         }
-        UiCtrl.displayList(); // now somehow display the playlist? maybe after adding songs it should display the iframe correctly?
+        console.log("uri: " + trackUris + " ");
+        // const clear = await ApiCtrl.deletePlaylist(token, playlistid);
+        const append = await ApiCtrl.appendPlaylist(token, playlistid, trackUris);
+        UiCtrl.displayPlaylist(); // now somehow display the playlist? maybe after adding songs it should display the iframe correctly?
     });
 
     return {
